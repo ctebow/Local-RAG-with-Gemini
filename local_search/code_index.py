@@ -8,13 +8,12 @@ from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 # Constants
 # ==========================
 BASE_INDEX_DIR = "index_storage"  # Where per-project indexes live
-INCLUDE_EXTENSIONS = (".js", ".ts", ".jsx", ".tsx", ".vue", ".css", ".html")
+INCLUDE_EXTENSIONS = (".js", ".ts", ".jsx", ".tsx", ".vue", ".css", ".html", ".py")
 EXCLUDE_PATTERNS = ["node_modules/", ".git/", "dist/", "build/", "__pycache__/"]
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 OLLAMA_MODEL = "llama3"  # Pick your Ollama model
 
 os.makedirs(BASE_INDEX_DIR, exist_ok=True)
-
 def get_index_dir(project_path: str) -> str:
     """Return the index folder for this project."""
     project_name = os.path.basename(os.path.abspath(project_path))
@@ -87,7 +86,7 @@ def build_index(project_path: str):
     print(f"[INFO] Index saved to {index_dir}")
 
 
-def query_index(project_path: str, query: str, top_k: int = 2) -> str:
+def query_index(project_path: str, query: str, top_k: int = 3) -> str:
     """Query the index and run the result through Ollama (unchanged output)."""
     embedding = HuggingFaceEmbedding(model_name=EMBEDDING_MODEL)
     Settings.embed_model = embedding
