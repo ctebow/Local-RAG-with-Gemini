@@ -1,10 +1,10 @@
 import os
 import sys
 from local_search import code_index
-from ollama_agent import agent
+from gemini_agent import agent
 
-# In-memory session history: { project_path: [query, response, ...] }
-session_history = {}
+# This version is modified to output a prompt for the Gemini CLI
+# instead of calling an API.
 
 def select_project(project_path):
     """Ensure the project exists and has an index."""
@@ -18,28 +18,30 @@ def select_project(project_path):
         print(f"[INFO] Index not found for {project_path}, building now...")
         code_index.build_index(project_path)
 
-    # Initialize history for this project
-    if project_path not in session_history:
-        session_history[project_path] = []
-
     return project_path
 
-def query_project(project_path, query):
-    """Query local code and LLM, store history, and print response."""
+def generate_cli_prompt(project_path, query):
+    """
+    Queries local code, formats a prompt for the Gemini CLI,
+    and prints it to the console.
+    """
     # Query local code
     code_response = code_index.query_index(project_path, query)
-    # Prompt LLM
-    llm_response = agent.prompt_llm(query, code_context=str(code_response))
     
-    # Store in session history
-    session_history[project_path].append((query, llm_response))
+    # Format the prompt for the CLI
+    cli_prompt = agent.format_prompt_for_cli(query, code_context=str(code_response))
     
-    print("\n--- Response ---")
-    print(llm_response)
-    print("----------------\n")
+    print("\n" + "="*60)
+    print("COPY AND PASTE THE FOLLOWING PROMPT INTO THE GEMINI CLI:")
+    print("="*60 + "\n")
+    print(cli_prompt)
+    print("\n" + "="*60)
+    print("END OF PROMPT")
+    print("="*60 + "\n")
+
 
 def main():
-    print("=== Local Coding Assistant ===")
+    print("=== Local Coding Assistant (CLI Prompt Generator) ===")
     current_project = None
 
     while True:
@@ -62,8 +64,7 @@ def main():
         elif user_query == "":
             continue
 
-        query_project(current_project, user_query)
+        generate_cli_prompt(current_project, user_query)
 
 if __name__ == "__main__":
     main()
-
