@@ -2,6 +2,9 @@
 
 This project implements a local Retrieval-Augmented Generation (RAG) pipeline designed to work with the Gemini CLI. It allows you to use your own codebases as a source of context, which can then be seamlessly injected into your prompts when interacting with Gemini.
 
+## Here's me trying it out:
+https://www.youtube.com/watch?v=JXZ4Dm5grf0
+
 ## How it Works
 
 The workflow is designed to be simple and efficient:
