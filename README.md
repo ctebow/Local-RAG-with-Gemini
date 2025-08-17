@@ -4,6 +4,7 @@ This project implements a local Retrieval-Augmented Generation (RAG) pipeline de
 
 ## Here's me trying it out:
 https://www.youtube.com/watch?v=JXZ4Dm5grf0
+Timestamp 8:17
 
 ## How it Works
 
